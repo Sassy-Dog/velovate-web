@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  /* Cyan palette - primary brand color */
+  --color-cyan-50: #e6feff;
+  --color-cyan-100: #ccfdff;
+  --color-cyan-200: #99fbff;
+  --color-cyan-300: #66f8ff;
+  --color-cyan-400: #33f4ff;
+  --color-cyan-500: #00d4dd;
+  --color-cyan-600: #00a8b0;
+  --color-cyan-700: #007d83;
+  --color-cyan-800: #005357;
+  --color-cyan-900: #00292a;
+
+  /* Coral palette - accent brand color */
+  --color-coral-50: #fff0ee;
+  --color-coral-100: #ffe0dd;
+  --color-coral-200: #ffc1bb;
+  --color-coral-300: #ffa399;
+  --color-coral-400: #ff8477;
+  --color-coral-500: #ff7a6b;
+  --color-coral-600: #e6694e;
+  --color-coral-700: #b34e3a;
+  --color-coral-800: #803527;
+  --color-coral-900: #4d1d14;
+
+  /* Navy palette - background and depth */
+  --color-navy-50: #e6e8eb;
+  --color-navy-100: #ccd1d7;
+  --color-navy-200: #99a3af;
+  --color-navy-300: #667588;
+  --color-navy-400: #334760;
+  --color-navy-500: #0a1628;
+  --color-navy-600: #081220;
+  --color-navy-700: #060d18;
+  --color-navy-800: #040910;
+  --color-navy-900: #020408;
+}

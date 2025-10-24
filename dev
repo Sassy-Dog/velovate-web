@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+# Developer Convenience Script for Velovate Marketing Site
+# Usage: ./dev [command] [options]
+
+set -euo pipefail
+
+DEV_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$DEV_SCRIPT_DIR/scripts/lib.sh"
+
+show_help() {
+    cat << EOF
+Velovate Marketing Site Developer Script
+
+USAGE:
+    ./dev [command] [options]
+
+COMMANDS:
+    run (default)        Run development server
+    build                Build for production
+    start                Start production server
+    lint                 Run linting
+    clean                Clean build artifacts
+    help                 Show this help
+
+OPTIONS:
+    --port <number>      Specify port (default: 3000)
+
+EXAMPLES:
+    ./dev                # Run dev server on port 3000
+    ./dev run            # Run dev server
+    ./dev --port 3010    # Run on port 3010
+    ./dev build          # Build for production
+    ./dev clean          # Clean build artifacts
+
+DEPLOYMENT:
+    This site auto-deploys to Vercel on push to main branch.
+    Production: https://velovate.app
+
+EOF
+}
+
+PORT=${PORT:-3000}
+COMMAND="run"
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        run|build|start|lint|clean|help)
+            COMMAND="$1"
+            shift
+            ;;
+        --port)
+            PORT="$2"
+            shift 2
+            ;;
+        --help|-h)
+            show_help
+            exit 0
+            ;;
+        *)
+            print_error "Unknown option: $1"
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
+cd_to_project_root() {
+    cd "$DEV_SCRIPT_DIR"
+}
+
+cd_to_project_root
+
+case "$COMMAND" in
+    run)
+        print_step "Starting Velovate marketing site on port $PORT..."
+        PORT=$PORT npm run dev
+        ;;
+    build)
+        print_step "Building marketing site for production..."
+        npm run build
+        print_success "Build complete"
+        ;;
+    start)
+        print_step "Starting production server on port $PORT..."
+        PORT=$PORT npm run start
+        ;;
+    lint)
+        print_step "Linting code..."
+        npm run lint
+        ;;
+    clean)
+        print_step "Cleaning build artifacts..."
+        rm -rf .next
+        rm -rf node_modules/.cache
+        print_success "Clean complete"
+        ;;
+    help)
+        show_help
+        ;;
+esac

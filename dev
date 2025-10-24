@@ -23,12 +23,12 @@ COMMANDS:
     help                 Show this help
 
 OPTIONS:
-    --port <number>      Specify port (default: 3000)
+    --port <number>      Specify port (default: 3010)
 
 EXAMPLES:
-    ./dev                # Run dev server on port 3000
+    ./dev                # Run dev server on port 3010
     ./dev run            # Run dev server
-    ./dev --port 3010    # Run on port 3010
+    ./dev --port 3020    # Run on custom port 3020
     ./dev build          # Build for production
     ./dev clean          # Clean build artifacts
 
@@ -39,7 +39,7 @@ DEPLOYMENT:
 EOF
 }
 
-PORT=${PORT:-3000}
+PORT=${PORT:-3010}
 COMMAND="run"
 
 # Parse arguments
@@ -69,10 +69,35 @@ cd_to_project_root() {
     cd "$DEV_SCRIPT_DIR"
 }
 
+ensure_dependencies() {
+    if [ ! -d "node_modules" ]; then
+        print_step "Dependencies not found. Installing..."
+        npm install
+        print_success "Dependencies installed"
+    fi
+}
+
+kill_port() {
+    local port=$1
+    local pids=$(lsof -ti:$port 2>/dev/null)
+
+    if [ -n "$pids" ]; then
+        print_warning "Port $port is in use. Killing existing process(es)..."
+        echo "$pids" | xargs kill -9 2>/dev/null || true
+        sleep 1  # Give processes time to die
+    fi
+}
+
 cd_to_project_root
+
+# Ensure dependencies are installed (skip for clean/help)
+if [[ "$COMMAND" != "clean" && "$COMMAND" != "help" ]]; then
+    ensure_dependencies
+fi
 
 case "$COMMAND" in
     run)
+        kill_port $PORT
         print_step "Starting Velovate marketing site on port $PORT..."
         PORT=$PORT npm run dev
         ;;
@@ -82,6 +107,7 @@ case "$COMMAND" in
         print_success "Build complete"
         ;;
     start)
+        kill_port $PORT
         print_step "Starting production server on port $PORT..."
         PORT=$PORT npm run start
         ;;

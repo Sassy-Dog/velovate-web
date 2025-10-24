@@ -8,11 +8,11 @@ Marketing website for the Velovate cycling platform - bringing cyclists together
 # Install dependencies
 npm install
 
-# Run development server (http://localhost:3000)
+# Run development server (http://localhost:3010)
 ./dev
 
 # Or specify a custom port
-./dev --port 3010
+./dev --port 3020
 
 # Build for production
 ./dev build
@@ -40,7 +40,7 @@ This site is automatically deployed to production via Vercel when pushing to the
 
 See `.env.example` for required environment variables. Set these in your Vercel project settings:
 
-- `MARKETING_DATABASE_URL` - PostgreSQL connection string for marketing database
+- `DATABASE_URL` - PostgreSQL connection string for marketing database
 
 ## Tech Stack
 
